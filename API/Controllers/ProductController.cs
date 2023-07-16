@@ -7,6 +7,7 @@ using Core.Entities;
 using Core.Specificaitons;
 using API.Dtos;
 using AutoMapper;
+using API.Helpers;
 
 namespace API.Controllers
 {
@@ -23,7 +24,7 @@ namespace API.Controllers
             IGenericRepo<ProductBrand> prodcutBrandRepo, 
             IGenericRepo<ProductType> productTypeRepo,
             IMapper mapper
-            )
+         )
         {
             _productRepo = productRepo;
             _prodcutBrandRepo = prodcutBrandRepo;
@@ -32,12 +33,18 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProducts([FromQuery]ProductSpecParams productParams)
         {
-            var spec = new ProductsWithTypesAndBrandsSpecification();
+            var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
+
+            var countSpec = new ProductsWithFiltersForCountSpecification(productParams);
+            var totalItem = await _productRepo.CountAsync(countSpec);
+
             var products = await _productRepo.ListAsync(spec);
-            var prodDTO = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDTO>>(products).ToList();
-            return Ok(prodDTO);
+
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDTO>>(products);
+
+            return Ok(new Pagination<ProductDTO>(productParams.PageIndex, productParams.PageSize, totalItem, data));
         }
 
         [HttpGet("{id}")]

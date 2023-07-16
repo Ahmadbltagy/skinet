@@ -18,6 +18,8 @@ namespace Infrastructure.Data
             _cotnext = context;
         }
 
+      
+
         public async Task<T> GetByIdAsync(int id)
         {
             return await _cotnext.Set<T>().FindAsync(id);
@@ -37,7 +39,10 @@ namespace Infrastructure.Data
         {
             return await ApplySpecificaion(spec).ToListAsync();
         }
-
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecificaion(spec).CountAsync();
+        }
         private IQueryable<T> ApplySpecificaion(ISpecification<T> spec)
         {
             return SpecificationEvaluator<T>.GetQuery(_cotnext.Set<T>().AsQueryable(), spec);

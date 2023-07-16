@@ -20,6 +20,14 @@ builder.Services.AddDbContext<StoreContext>(x =>
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
 builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
+
+builder.Services.AddCors(opt=>
+    opt.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+    })
+); 
+
 var app = builder.Build();
 
 // migrate any database changes on startup (includes initial db creation)
@@ -50,6 +58,8 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
