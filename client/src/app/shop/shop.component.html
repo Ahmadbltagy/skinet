@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="row">
+    <section class="col-3">
+      <div class="mb-3">
+        <h5 class="text-warning text-uppercase fw-bold ml-3">Sort</h5>
+
+        <select #sort class="form-select" (change)="onSortSelected(sort.value)">
+          <option *ngFor="let option of sortOptions" [value]="option.value">
+            {{ option.name }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <h5 class="text-warning text-uppercase fw-bold ml-3">Brands</h5>
+        <ul class="list-group">
+          <li
+            class="list-group-item"
+            *ngFor="let brand of brands"
+            [value]="brand.id"
+            [class.active]="brand.id === this.shopParams.brandId"
+            (click)="onBrandSelected(brand.id)"
+          >
+            {{ brand.name }}
+          </li>
+        </ul>
+      </div>
+
+      <h5 class="text-warning text-uppercase fw-bold ml-3">Types</h5>
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          *ngFor="let type of types"
+          [value]="type.id"
+          [class.active]="type.id === this.shopParams.typeId"
+          (click)="onTypeSelected(type.id)"
+        >
+          {{ type.name }}
+        </li>
+      </ul>
+    </section>
+
+    <section class="col-9 d-flex flex-column justify-content-between">
+      <div class="d-flex justify-content-between align-items-center pb-2">
+        <header>
+          <span *ngIf="totalCount">
+            Showing
+            <strong>
+              {{
+                (this.shopParams.pageNumber - 1) *
+                  (this.shopParams.pageSize + 1)
+              }}
+              -
+              {{
+                this.shopParams.pageNumber * this.shopParams.pageSize >
+                this.totalCount
+                  ? this.totalCount
+                  : this.shopParams.pageNumber * this.shopParams.pageSize
+              }}
+            </strong>
+            of<strong>
+              {{ totalCount }}
+            </strong>
+            Results
+          </span>
+          <span *ngIf="!totalCount">
+            There are <strong>0</strong> result for this
+          </span>
+        </header>
+
+        <div class="row align-items-center mt-2">
+          <div class="col-auto">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Search"
+              #search
+              (keyup.enter)="onSearch(search.value)"
+            />
+          </div>
+
+          <div class="col-auto">
+            <button
+              class="btn btn-outline-primary me-2"
+              (click)="onSearch(search.value)"
+            >
+              Search
+            </button>
+            <button class="btn btn-outline-success" (click)="onReset()">
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <ng-container *ngFor="let prd of products">
+          <app-product-item [product]="prd"></app-product-item>
+        </ng-container>
+      </div>
+
+      <div class="d-flex justify-content-center" *ngIf="totalCount">
+        <app-pager
+          [totalCount]="totalCount"
+          [pageSize]="this.shopParams.pageSize"
+          (pageChanged)="onPageChange($event)"
+        ></app-pager>
+      </div>
+    </section>
+  </div>
+</div>
