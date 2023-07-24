@@ -1,7 +1,12 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
-      <img src="assets/images/logo.png" style="max-height: 60px" alt="logo" />
+      <img
+        src="assets/images/logo.png"
+        style="max-height: 60px"
+        alt="logo"
+        routerLink="/"
+      />
     </a>
 
     <button
@@ -16,17 +21,36 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="navbar-nav m-auto text-uppercase fw-bold mb-2 mb-md-0">
+      <ul class="navbar-nav m-auto text-uppercase fs-5 fw-bold mb-2 mb-md-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a
+            class="nav-link"
+            [routerLink]="['']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Home</a
+          >
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Shop</a>
+          <a
+            class="nav-link"
+            [routerLink]="['/shop']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Shop</a
+          >
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Contact</a>
+          <a
+            class="nav-link"
+            aria-current="page"
+            href="#"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Contact</a
+          >
         </li>
       </ul>
       <div class="d-flex align-items-center">

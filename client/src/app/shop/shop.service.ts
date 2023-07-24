@@ -5,12 +5,13 @@ import { Observable, map } from 'rxjs';
 import { IProductBrand } from '../shared/models/productBrand';
 import { IProductType } from '../shared/models/productType';
 import { ShopParams } from '../shared/models/shopParams';
+import { IProduct } from '../shared/models/product';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShopService {
-  baseUrl = 'https://localhost:7213/api/';
+  baseUrl = 'https://localhost:44353/api/';
 
   constructor(private http: HttpClient) {}
 
@@ -35,6 +36,9 @@ export class ShopService {
         params,
       })
       .pipe(map((res) => res.body));
+  }
+  getProduct(id: string): Observable<IProduct> {
+    return this.http.get<IProduct>(`${this.baseUrl}products/${id}`);
   }
   getBrands(): Observable<IProductBrand[]> {
     return this.http.get<IProductBrand[]>(`${this.baseUrl}products/brands`);
